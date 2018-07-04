@@ -1,0 +1,41 @@
+jobs
+ctrl+z
+bg
+fg
+touch 一个已经存在的文件，只是更新文件的修改时间。
+file 显示文件类型
+uptime
+lspci
+lsusb
+lsmod
+locate
+updatedb
+find
+shutdown
+poweroff
+reboot
+tar xzvf
+tar czvf
+mke2fs
+mkfs.ext4
+fsck
+useradd
+passwd
+usermod
+userdel
+groupadd
+groupmod
+groupdel
+mount
+目录没有x权限则不能查看内容
+chown
+chgrp
+chmod
+cp /somedir/ /desdir/ 和 cp /somedir/* /desdir/ 是不一样的
+
+
+
+问题：
+一，不能自动source ~/.bashrc
+二，vmbox 与主机共享文件夹
+三，主分区和扩展分区的区别

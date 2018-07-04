@@ -1,0 +1,7 @@
+一，lua 中，arg 表示执行 lua 脚步时所附加的参数
+二，and 由于有短路(Short-cut evaluation)，所以，当其第一个是 false 时，返回第一个参数，print(nil and 4) --> nil
+不然就返回第二个参数,print(4 and nil) --> nil, print(4 and 5) --> 5;
+or 也有相似的道理，print(4 or nil) --> 4, print(nil or 4) --> 4;
+三，lua 中 array 下标从1开始，days = {"Sunday", "Monday", "Tuesday"}, print(days[1]) ---> Sunday
+四，t = {sunday = "xxx"} ---> t.sunday = "xx", t["sunday"] = "xx"
+五，key = "other", t = {[key] = "something"}; --->t.key = nil, t.other = "something", t["other"] = "something"， t[key] = "something"

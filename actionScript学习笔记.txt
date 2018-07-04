@@ -1,0 +1,77 @@
+一：mouseX 和mouseY都是相对于显示对象自身的注册点而言的。
+二：要让某个显示对象响应键盘事件，需要先将舞台的焦点设置为它。将键盘事件注册为舞台上就不需要。
+三：Actionscript中，以顺时针为正的角度。Math包中的方法都是以弧度（radian)值来计算的。
+四：要使用Math.atan2（dy，dx）来计算角度值。不管是正负都是正确的。
+五：对于程序中的常量最好将其放在单独的一个Config文件中，可以做成是Config类的静态变量的方式。
+六：对于Alpha透明度，100表示不透明，0表示完全透明
+七：若要通过使用 ActionScript 应用滤镜，您必须制作整个 filters
+数组的临时副本，修改临时数组，然后将临时数组的值分配回 filters 数组。 无法直接将新滤镜对象添加到 filters
+数组。每个DisplayObject都有一个filters 属性。 sprite.filters = sprite.filters.concat(new
+BlurFilter(4,4,2)); 222012316011015
+八：在一个显示对象中添加了事件监听，如果这个显示
+对象从舞台上移除了，那些事件监听其实还是存在的。所以，必须要确保一个现实对象从舞台上移除时，他的所以事件监听器都已经被移除了
+九：对于显示对象，改变其XY位置时，其实是将其注册点移动到其父对象的指定的XY位置处（注册点是固定的）。然而其在用drawing
+api进行绘制时，是相对于其自身注册点设置位置的，默认为（0,0）。所以，一般绘制时都是以负的值作为左上角坐标，这样可以确保其注册点在其中心。
+十：对于回弹的效果，需要检测其超出边界的值，然后将其放在边界上，然后在翻转其相应方向上的速度。
+十一：对于摩擦力，可以再每个方向上各个给予，或者在合力上给予。
+十二：对于stage.width和stage.stageWidth，
+前者是指舞台上显示对象的宽度，如果没有显示对象，其值为0，儿后者是指整个舞台的宽度，其值随着flash播放窗口的变化而变化。
+十三：可以再MouseDown事件中设置startDrag，在MouseUp中设置stopDrag，来给sprite设置拖动的功能。MovieClip继承
+自sprite，所以它也可以。
+十四：计算一个物体的惯性，即利用enterFrame事件来计算两帧之间物体的x和y移动了多少，他们的差值既是速度。
+十五：对于弹性运动，他们 之间的距离和他们的加速度成正比，所以他们的速度回越来越大，二对于缓动，他们之间的距离和他们的速度成正比，
+所以他们的速度回越来越小。
+十六：A点绕B点顺时针旋转m弧度之后的新位置计算：
+x1 = A.x - B.x; y1 = A.y - B.y;
+newA.x = cos(m)*x1 -sin(m)*y1 + B.x;
+newA.y = cos(m)*y1 + sin(m)*x1 + B.y;
+十七：对于用Timer来做动画时，当TimerEvent.Timer发生时虽然动画的位置改变了，但是在屏幕上显示时还是按照帧频率来更新的，
+所以当Timer事件发生频率大于帧频率时，动画的显示就会“跳动”，但是可以使用函数updateAfterEvent来强制更新屏幕，这样动画就
+会平顺了，但是如果代码的执行时间长于timerInterval,则不能按照设定的时间间隔广播Timer事件，只能等所有代码运行完之后才能广播
+TimerEvent。所以一般不用Timer来做动画。
+十八：使用getTimer（）函数来获得flash运行的时间，以这个运行的时间来计算过去的时间，elapsed = getTimer（） - time；
+time = getTimer(); 然后按照elapsed比率计算需要移动的距离，这种动画的好处就是，不管帧频率是多少，
+移动速度pixel per seconds 都是一样的，不过，如果fps太小的话，就会出现跳帧。
+十九：对于一个容器，如果不想让他的孩子接受鼠标事件，那么就让它的mouseChildren 属性为false。
+如果不想让它自己接受鼠标事件，则设置mouseEnabled = false;
+二十：对于像素级的碰撞检测，需要使用bitmapData中的方法hitTest，需要提前创建两个透明的bmpd对象，然后用draw方法将将检测对象画进去,
+可能还需要考虑对象的角度的属性，然后在调用hitTest方法，其中的alpha值是指，检测碰撞最低需要的透明度值。
+二十一：对于拖拽对象startdrag()，一般都是讲鼠标按下时的对象保存后使用，因为mouseUP事件的对象可能和mousedown事件的对象不一样。
+二十二：在《AS动画高级教程》等角投影中，坐标轴x为水平向右，y为垂直向上，z为垂直于屏幕向外。屏幕显示的是xz平面，y表示物体的高度。
+二十三：如果父亲和孩子都注册了某一个事件，那么，当孩子抛出这个事件时，父亲和孩子中的监听器都会触发。当父亲抛出事件时，只有父亲监听器会被触发。
+并且都是在目标阶段。
+二十四：URLLoader用于二进制文件的加载，Loader用于加载swf和图片。
+25，e.localX 是鼠标事件在显示对象中的局部坐标，displayObj.mouseX 也是鼠标在显示对象中的局部坐标， e.stageX是鼠标事件的全局坐标。
+26，AS3的String类没有数组一样的下标操作。
+27，embed的用法：
+[Embed(source='../../../assets/dig.swf', symbol='DigSound')]    //注意这里没有分隔号
+private var DIG_SOUND:Class;
+或者：
+[SWF(frameRate = 40, width = 100, height = 100, backgroundColor = 0x0000ff)]
+28,游戏处理流程基本是：创建请求，填充请求，发送请求，后端处理请求完毕，前端接受后端事件，解包请求，处理事件。
+29,对于整数和浮点型的数值，使用vector会比array快，但是后者在存储对象类型时比前者快。
+30,对于一个游戏，只需要一个主循环就好，多了不好管理，并且可能造成不同步的问题。
+31，对于TextField对象而言，如果要让它点击之后跳到一个地方去，可以直接用htmlTest=“<a href=\”http://www.haolly.com/\”>haolly.com</a>”，也可以直接相应鼠标点击事件，然后navigateToURL()，link事件只对以event开头的起作用
+
+32, as
+的运行时库原理，即在运行时加载不同的库原件。将不同的原件放在一个swf文件中，其中每个原件都提前设置了导出类，然后再运行过程中，当系统需要某些库时在用
+Loader 加载。这类似于奥比岛的 library。
+33，要为舞台上的特定显示对象设定上下文菜单，定义一个ContextMenuItem
+和ContextMenu， 给ContextMenuItem
+添加选择事件。详见ContextMenu示例后面代码示例
+34，FileReference:
+load将文件加载到内存中，save将文件保存到本地，upload将文件上传到服务器，download从服务器下载文件
+35，关于在load外部swf文件时应用程序域到问题：详见LoaderContext 类中
+applicationDomain 属性的描述
+36，可以为显示对象添加AddedStage事件和RemovedStage事件来停止那些不再显示列表上的显示对象继续消耗cpu资源。
+因为虽然显示对象不再显示列表上，但是EnterFrame事件还是会继续触发，导致cpu的消耗，将不再显示列表上的显示对象设为NUll也不能阻止它继续消耗
+cpu，因为你不知道gc何时才会运行。
+37，loader类中的 unloadAndStop()方法可以强制卸载已经加载了的 swf
+文件，**并且**强制执行 gc
+38，对于事件的注册，如果不是useCapture，那么就是在目标阶段和冒泡阶段。
+如果给一个mc注册一个捕获阶段的监听器，那么只有当这个mc在某一个事件流的捕获阶段才会触发，mc的非捕获阶段事件是不会触发的。
+
+
+问题：
+ 仅限于文件系统的 SWF 文件不得使用 socket。
+ 只有仅限于文件系统的 SWF 文件和可信的本地 SWF 文件可以访问本地资源。

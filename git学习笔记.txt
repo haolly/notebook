@@ -1,0 +1,32 @@
+一：可以新建一个项目文件夹，里面是否有已经存在文件没有关系。 git init 之后会初始化git库.
+其他的文件可以用命令 git add 来添加到 跟踪文件 列表中
+二：git status 可以查看当前库中文件的状态。当文件被修改了之后，只有执行 add命令之后才会将文件的
+更改更新到暂存区。如果你修改了一个文件并且已经add了，然后又修改了，但是没有add，status命令可以看到两个相同的文件，一个是之前执行add命令
+后暂存的，一个是现在修改的。所以，每次提交前，务必要用status 查看一下未添加到暂存区的文件，然后用add命令添加到暂存区
+二.二：要养成一开始就添加.gitignore文件的习惯。格式规范如下：所有空行和以#开始的都会被忽略，匹配模式后面跟随斜杠(/)的说明要忽略的是目录，
+在模式前加感叹号（！）表示取反，表示不忽略这个文件，可以使用global模式匹配
+(global模式解释：*表示零个或多个任意字符，？表示一个任意字符，[a-z]表示范围，[abc]表示匹配任何一个方括号中的字符)
+二.三：git diff命令是比较已经暂存（add）了的文件和当前编辑过后还没有add之后的文件，git diff --staged  (git diff --cached)
+比较的是已经add了的文件和上次commit时的区别
+三：commit命令将暂存区（相当于索引）中的文件添加到 本地库 中（相当于添加一个节点，以后可以从这里恢复）。
+可以使用git commit -m "this is the frist commit"来直接提交而防止出现vim编辑消息的繁琐。
+还可以使用 -a 命令跳过暂存区的步骤(即add命令），所有被标记为跟踪的文件都将提交。
+四：git rm filename 将文件从跟踪列表（本地库）中删除，并从工作目录删除。git rm --cached filename 从版本库中删除但是不删除本地文件，
+以便将这些文件加入.gitignore文件中。git reset HEAD -- file 只是移除索引中的file文件，即将undo add 操作。
+git rm \*~将移除当前目录以及所有子目录中以~结尾的文件。注意，git有自己的文件匹配模式，与shell不同，所有*之前要加 \
+四.一：可以用git log来查看提交记录
+四.二：可以用git commit --amend 撤销上一次的commit，如果忘记了add某个文件，可以先add之后再使用git commit --amend,此时将打开文本编辑器
+五：cd进入git本地库文件之后，可以用git remote -v 查看远程库地址，git remote 查看远程repository的名字。默认本地repository为master，远程为origin。
+所以，git push 和 git push origin master 是一样的
+五.一：可以用git remote add [shortname] [url] 来添加远程的repository
+六：git fetch [remote-name] 只是将拉取远端的数据更新到本地仓库，并不自动合并到当前工作分支，但是git pull 将自动合并远端分支到本地当前分支。
+七：git remote show [remote-name] 显示远程仓库信息
+八：git remote rename oldname newname 修改远程repository的名字，类似的还有git remote rm xx
+九：git 每次commit之后都会有一个指针指向上一次的commit对象，而每个commit对象都有一个指针指向一个tree对象（Snapshot），每个snapshot包含这所有的blob（文件）对象信息。默认分支master指向当前commit对象，HEAD指针表示当前的分支，默认指向master分支。
+十：git branch testing 创建一个
+
+
+
+PS：忘记添加gitignore文件的方法http://stackoverflow.com/questions/1139762/gitignore-file-not-ignoring
+http://git-scm.com/book/zh/Git-%E5%88%86%E6%94%AF
+天黑黑

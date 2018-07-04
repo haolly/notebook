@@ -1,0 +1,245 @@
+java 学习笔记
+main函数中 args[0] 不是程序本身的名字，shell 编程中是
+1，object类中的equals方法默认是比较两个对象的引用（地址），和操作符==一样。一般类都会重写这个方法，比如String 类，equals比较的是字符不是引用。
+2，除了以小写字母开头的基本类型外，所有对象都是以引用传递的。引用本身保存在堆栈中，所引用的对象保存在堆中。String除外。
+3，>>>表示用0填充高位，>>使用符号位填充高位，<<使用0填充。
+4，java中所以对象都在堆上分配，也就是说，没有像c++中的局部对象（在栈上），即，所有对象都需要new 出来。
+5，java中，类属性可以再定义时就初始化，如果不，java会自动帮你初始化，不管是基本类型还是对象引用，而c++是不行的。
+一般也不建议这样做，因为在构造函数中更好。
+6，类中静态域初始化于所有之前，并且父类初始化在前。c++中好像也是这样。java中static变量可以在任何时候初始化，而C++中好像必须在定义时就赋值。类的静态初始化只发生在类加载过程中，当类加载完毕后，如果在去new一个相同的类，静态初始化是不会去调用第二次的。
+6.1，相同的类被不同的类加载器加载后，jvm 认为这是不同的类。
+7，java中数组的写法和c++中的不一样，有两种写法，一种是 int[] a = {1,2,3};另一种是int[] a= new int[3];
+其中第二种写法将基本类型初始化为0或者false，将对象初始化为NULL；其实可以讲数组看成一个引用类型，即对象。
+8，在一个java文件中，只能有一个public 类，但可以包含多个非public类，包括internal，protected，private。
+这个类的名字必须和文件名字相同（包括大小写）。注意，protected也具有包访问权限。
+9,继承时，如果基类有构造函数，不管是否有参数，子类必须调用父类的构造函数super(...);而且子类必须可以访问到父类的
+构造函数，如果父类构造函数是默认包访问级别，但是子类没有和父类在同一个包中，则super（）不能成功。
+10，重写(override，覆盖，即，对*在子类中可见的父类方法重定义，参数必须一样*)方法的访问修饰符一定要大于等于被重写方法的访问修饰符
+（public>protected>default>private）,其实重写就像实现某个接口的函数一样。重写主要是用于多态。但静态方法是与类关联的，所以重写后没有多态。
+11, 除了内存以外的资源，都需要自己手动释放。参考：百度 java内存泄露
+12，重载和重写：参数和基类一样的，返回值必须也一样，否则报错，这种是重写。如果参数不一样，则为重载。
+13，当需要重写一个函数时，可以添加@Override以是编译器保证这个函数是被重写的。
+14，在组合和继承这两者中来选择，如果确定要向上转型，就是用继承，否则一般用组合。
+15，final类表示这个类不可以有子类。final方法表示这个方法不可以被重写。
+16,java中，变量的初始化顺序：父类静态变量，父类静态初始化块，子类静态变量，子类静态变量初始化块，父类变量，父类初始化块，父类构造函数，
+子类变量，子类初始化块，子类构造函数。
+17，在构造函数中，只是调用private方法，不要调用public方法，因为你不知道派生类是否会重写这个方法。
+18，有任何抽象方法的类都是抽象类，抽象方法类似于c++中的纯虚函数
+19，定义接口就是将class关键字该为interface，接口只能用于实现。一个类可以实现多个接口，每个接口中的函数都必须重写。
+就像c++中的多重继承一样，需要尽量避免多个接口中有相同的方法名。类可以实现接口，接口可以继承接口。
+20，对于接口和抽象类的使用，我觉得接口主要是用于多重继承，其他时候就用抽象类就可以了。
+不过还有一种方式就是，让抽象类继承接口，然后你选择继承接口或者抽象类。
+21,内部静态类，在使用时名字需要使用*外部类名.内部类名*的方式。可以在内部类中使用*外部类名.this*来返回外部类，
+直接使用this的话表示inner类。内部类也可以使private和public的。
+非静态内部类不能直接new出来，只能通过一个外部类的对象来new出来，eg：out.new InnerClass()；
+22，关于内部类，这他妈的就是用来装逼的吗？
+静态内部类不能调用外部类中的普通成员，只能调用外部类中的静态成员。
+23，如果一个类有内部类，但这个类又被其他类给继承了，这个内部类还是在的，就像是成员属性一样，并且如果重新定义一样的内部类，先前的是不能被覆盖的。
+当然，也可以再继承的这个类中在写一个内部类来继承先前的内部类，这样就达到了覆盖的效果。
+24,java 中容器这能存储对象类型，对于基本值类型，有他们对应的包装器。在Java中优先使用容器，一般不用数组。
+25,java 中，数组和二维数组的长度都是根据第一维的长度计算的。例如：Object[][] fields = new Object[22][33]; fileds.lenght ==22;
+26,除了RuntimeException及其子类可以不用捕获以外，其他的异常都需要手动捕获（或者将他们向上抛）。通过继承Exception来建立自己的异常，通常，异常的名字很重要。
+函数中通过throws 来表示自己要抛出异常。
+27，finally 子句主要是用于关闭非内存资源。如果try语句后面跟有finally语句，不管什么情况下，例如try中有return，finally子句总是会被执行。
+28，如果父类中声明了某一个方法抛出A异常，在子类中重写这个方法时，可以选择不抛这个异常（因为已经是另一个方法了），或者抛相同的异常（包括A异常的子类）
+但是不能抛出其他的异常，因为这违反了子类可替换原则。
+29，对于String类，如果不是new出来的，String a="sss",b="sss",则有a==b为true,如果a、b都是new出来的，a==b 为false；
+30, java 中，类的类型信息存放在Class对象中，Object对象的方法getClass可以获得已有类的类型信息。Class.forName()也可以得到特定类的类型信息。
+CLASSNAME.class也可以获得类型信息，但是和前者有点区别。
+31，可以使用isInstance() 或者instanceof来判断类型信息。两者是一样的。
+32，java中反射java.lang.reflect 技术可以得到一个类的所有方法和属性，包括私有的，然后就可以调用它们了。
+33, 是否可以拥有泛型方法，与所在的类是否泛型没有关系，想用就用。静态方法只能用泛型方法。方法的泛型参数在方法的返回值之前，
+用<>括住。如： public <T> List<T> f(){....}
+34, 在java泛型中，泛型参数的类型会被擦除到它的第一个边界，即 extends 的那个类型。c++中的模板参数会保留它的类型信息。
+在泛型参数中，extends 和 super分别指定了上界和下界。
+35，你可以将子类的数组赋值给父类的数组，但是运行期会报错。
+    Tank[] tk = new MyTank[10];
+    tk[0] = new Tank(); //error
+    tk[1] = new MyTank(); //ok
+36，//cannot convert from ArrayList<MyTank> to List<Tank>
+    List<Tank> tkArr = new ArrayList<MyTank>();
+37,java 中的I/O
+1) File 类提供了基本的文件属性
+2）Reader/Writer是字符类的基类
+3）InputStream/OutputStream 是字节流的基类，派生出不同数据源的字节流类，包括以文件作为数据源的FileInputStream。
+4) InputStreamReader/OutputStreamWriter 可以将字节流转换为字符流
+5）使用时，将创建不同的类进行配合（装饰）来达到我们想要的效果。这种方式他妈的太傻比了。一般都是用
+FilterInputStream和 FilterOutputStream 的子类来装饰其他的类。
+例如将FileReader和BufferedReader组合来读取文件，将FileWriter和BufferedWriter组合来写入文件，当然，也可以再装饰
+一个PrintWriter来提供格式化的输出。
+将BufferedOutputStream 和 FileOutputStream 组合来写入字节流。
+38, ByteBuffer 可以有不同的视图，并且默认是BIG_ENDIAN的。
+39，可以将FileChannel利用map方法映射到内存中。具体见jdk
+40, 可以使用ObjectOutputStream/ObjectInputStream 将实现了Serializable接口的类序列化。如果不想让对象的某个字段（比如密码）
+被序列化到文件中，则可以用transient关键字标注它。实现了Externalizable接口的类相当于每个字段都是transient的。
+41,实现了Comparable接口的类可以比较。也可以自己定义一个实现了Comparator的接口的来自定义比较函数，这里用到了策略模式。
+42,容器类中有大量的可选操作，这些操作可能会抛出UnsupportedOperationException，例如之间操作Arrays.asList()返回的list。
+43,接口Future表示线程执行结果，一个与ExecutorService类配合使用
+44,所有对象都自动含有单一的锁，在对象上调用任意synchronized的方法时，此对象将被加锁。
+当此对象被加锁后，所有其他的synchronized方法都必须等待。
+45,当一个类的状态*只是*由一个状态元素决定的，那么当这个状态完全由线程安全的类所管理，那么这个类就是线程安全的。
+46，为了保护状态的一致性，要在单一的原子操作中更新所有相互关联的状态变量。
+47,每一个可共享的变量都需要由唯一的一个确定的锁保护，而维护者应该清楚这个锁。
+48,内部锁是可重入的。findbugs
+49,对于每一个涉及多个变量的不变约束，需要使用*同一个*锁保护其 *所有* 的变量。
+50,锁的粒度要合适的细分，但是对于耗时的计算和io等，执行这些操作时不要让他们占有锁
+51,只要数据需要被跨线程共享，就需要恰当的同步。
+52,在多线程的程序中double 和 long类型必须是volatile的，因为jvm可能会将64为的数按照两个32位的数来拼接,volatile变量不会缓存在寄存器或者其他对处理器隐藏的地方，所以，读一个volatile变量时，总会返回由某一个线程锁写入的最新值,所以，volatile变量可以保证可见性，但是不能保证原子性，而锁既可以保证可见性，又可以保证原子性。
+
+坑在这里：
+1，如果定义两个String a = "ssss", b = "ssss";那么a == b 为true；
+2，对于包装类Integer，他会缓存内部值，在锁的时候要注意。
+
+
+适配器
+工厂模式
+迭代器
+
+Java中List源码中的public abstract interface List<E> 怎么理解？
+同步和不同步怎么理解？
+
+容器：
+List：
+ArrayList
+LinkedList 相当于 Stack Queue Deque
+Set：
+TreeSet
+HashSet
+Map：
+HashMap
+TreeMap
+
+已废弃勿用：
+Stack
+Vector
+HashTable
+StringBuffer
+PrintStream, use PrintWriter instead.
+
+工具类：
+Collectios，包装一些非线程安全的集合类使之成为线程安全的类。
+Arrays
+
+基本数据
+byte 1
+char 2
+short 2
+int  4
+float 4
+long 8
+double 8
+
+java IO 中，I 和 O 的区别：从输入流中读取数据，向输出流中写入数据
+
+JavaNetworkProgramming 笔记：
+一，不要使用PrintStream，因为它是和平台相关的。一般使用 PrintWriter
+二，不要使用BufferedReader.readline(),因为\r之后不一定就是\n，会导致程序一直等下去。
+三，当一个Thread yield 和 sleep 时， 它所持有的锁是不会自动释放的。
+四，Stream 都是 block IO
+五，InetAddress.getByName()可能返回不存在的主机，当是用字符串形式的 ip 来调用这个函数时。
+六，getAddress()函数返回的值是一个 unsigned byte, 也就是说有可能大于127，但是 java 中没有 unsigned byte，
+所以，当用 byte[] 来接受返回值时，有可能得到一个负值，可以通过加256来得到一个正值。
+七，URL 是用于网络下载的，而 URI 是用于普遍意义上的，并且前者不能支持自定义协议。后主支持的协议也比前者多。URI 中非 ASCII 字符会被转换（escape）,
+详见JAVA API。一般情况应尽量使用 URI。
+八，URL 不会自动去转义非 ASCII 字符，需要手动去 URLEncode.encode()，注意，此方法会转义/ : 等字符，所以需要将 url 分成几段来分别转义
+九，URL 和 URI 只是用于资源的定位，它并不用于表示具体的某一个 ip 地址。
+十，URL 类的两个方法，openStream()和 openConnection()，前者用于 http 的 get 请求，后者还可以用于 post 请求。
+十一，http request请求格式：
+方法 路径 版本
+header 键值对（一般需要 Content-length 和 Content-type，Server 可以有 Set-Cookie，client 可以有 Cookie）
+两个carriage return/linefeed pairs
+data
+十二，CookieManager 用于管理 Cookie
+十三，ResponseCache用于管理 http 的缓存
+十四，urlconnection 类中，setRequestProperty()用于设置 client 发送的 http header，而getHeaderField()
+用于获取 Server 返回的 http header。getOutPutStream() and getInputStream() 可以被用于向服务器发送数据和
+从服务器得到数据（前提是相应的 doOutput 和 doInput 被设置为 TRUE）
+注意：当向服务器发送数据时，由于需要知道数据的长度作为 http header 中 Content-length，所以java 会缓存所有你向
+输出流中写入的数据，当关闭流时才会真正去发送数据。相关函数 setFixedLengthStreamingMode();
+十五：http response 格式：
+http/1.x 200 OK
+Server:Apache
+Last-Modified:Sat, 17 Jan 2015 09:27:43 GMT
+Content-length: xxx
+Content-Type:text/html; charset=utf-8
+Cache-Control:max-age=13147
+Expires:Sun, 18 Jan 2015 07:04:03 GMT
+Date:Sun, 18 Jan 2015 03:24:56 GMT
+Transfer-Encoding:chunked
+Set-Cookie:BAIDUID=E045369E4EC6BA3019D41362B45CE047:FG=1; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.com
+Set-Cookie:BAIDUPSID=E045369E4EC6BA3019D41362B45CE047; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.com
+Set-Cookie:BDSVRTM=0; path=/
+Connection:keep-alive
+Connection:Transfer-Encoding
+\r\n\r\n
+data
+十六：Socket 用于传输层，代表 tcp 连接，代表一个机器的端口和另一个机器的某个端口通信，用于客户端
+十七：socket 又某些特性可以关闭和打开，如setTcpNoDelay()可以设置数据包发送时是否缓存，在实时性很高的游戏中，不缓存很重要
+十八：ServerSocket 用于服务端，当它 bind()之后就可以监听了
+
+
+JAVA NIO 学习笔记
+1，Buffer 类。主要是 ByteBuffer 类，有direct 和 nodirect 两种不同的形式。ByteBuffer 可以当做不同的视图来操作（注意字节顺序，ByteOrder），和 Channel 类交互的
+也主要是它。
+2,Channels包， 主要有 Channel 接口，ReadableByteChannel, WritableByteChannel,ByteChannel, InterruptableChannel 等
+接口，学习一个包（类）首先要从了解它们的接口开始！
+3，GatheringByteChannel 和 ScatterByteChannel 接口允许批量的 Buffer 操作
+4，Locks are associated with files, not channels. Use locks to coordinate with external processes, not between threads in the same JVM.
+5，在 FileChannel 上的锁有共享的和独占的两种，前者只需要 read 权限即可，后者必须要有 write 权限才行。
+6，每一个 SocketChannel 都有一个相互关联的 Socket 对象，但是反之则不一定
+8，Socket 和 Serversocket 都是面向流的，而 DatagramSocket 是面向包（Packet）的
+9，DatagramChannel 的 connect 方法将限制其只能和某一个地址的互相通信，这可以一定程度上保证数据包的顺序性
+10，SelectionKey 中的 readyOps 返回的 set 是interestsOps()的子集
+11，通常来说，Selector 是不建议在多个线程中使用的，这样会导致它的 ready 集合和 interest 集合发送不可预测的行为。
+12，Selector 的选择过程需要注意的两点，一，它只是返回 ready 的个数，所以只要 n 大于0的时候就需要遍历 selected set 来找出哪些
+事件是 ready 状态的，并且，ready 的状态要检查所有注册在此 selector 上的状态。二，自己处理完 selected set 后需要手动从集合中删掉，
+这样才能确保第二次在其之上的第二次 select 操作会清楚它的标志位，如果不删除，它将继续留在 selected set 中，并且标志位也不会
+被系统清除。
+
+Effective java
+一，重写 equals方法时，一般只需要比较和自己相同的类，不需要比较其他类，因为你不知道其他类是否和你的类之间具有对称性。
+二，equals和 comparable，对于继承后添加其他属性的类，只要父类不是抽象类和接口，是没有方法保证它和父类之间即具有对称性又具有传递性的，除非使用组合。参见java.sql.Timestamp 类
+三，对于 Float 和 Double类型，他们有自己的比较方法，比较时应该使用。Double.compare(),Float.compare()
+四，就像在构造函数中一样，在 clone 函数中也不能调用非 final 方法（因为这样的方法可能被子类重载而有不同的实现）
+五，对于 Cloneable，最好的办法就是不去使用它。用复制构造函数或者静态工厂函数替换它的功能即可。
+六，在一个公开的类中，public static final 数据应该是 immutable（不可变）类型的，所以，数组是不满足这样的条件的（数组不可变，但是里面的内容是可以变的）。
+七，（在实现继承而不是接口继承时）你不应该继承别人写的类，除非特别说明，因为你不知道别人的类的实现细节，无法保证其不变性。所以要用组合(composition)，
+组合的另一个好处是，你可以组合很多个类，使其具有多重继承的效果。
+八，如果一个类不是特别的说明可以去继承，那就不要去继承，但是可以去组合。
+九，List，Map 等能使用泛型的地方要尽量使用，List<?> 和 List，List<Object>是不一样的,第一个是只读的，第三个有类型保护，第二个没有，并且，List<String>不是继承自 List<Object>的。
+十，数组(Array)和列表(List)有不同的表现，前者在运行时保证类型正确，而后者在编译时保证类型正确（运行时擦除）
+十一，你是不能创建泛型数组的，即 E elements[] = new E[size]; 是会报错的。
+十二，在使用泛型的时候，最好使用通配符(wildcard)，规则是 PECS(producer-extends, consumer-super)
+十三，map 的 key 必须是 immutable 的！参见 wiki 中的条目
+十四，使用 enum 中的 ordinal()方法是万恶之源，可以用 EnumSet或者 EnumMap这两个类来替换。
+
+
+JavaConcurrencyInPractice 笔记
+The real performance payoff of dividing a program’s workload into tasks comes when there are a large number of independent, homogeneous tasks that can be processed concurrently.
+服务器关闭时，应该让已经在队列里面的链接处理完之后才关闭。
+调用 interrupt 方法并不一定会阻止线程运行，它只是给线程一个建议而已，好的方法会去检查中断状态从而抛出异常，如 wait，sleep， join 等字符，所以需要将
+但不是所有的方法都这样
+对于 InterruptedException，处理办法有两个，一个是做相应的清理工作，然后用 Thread.currentThread().interrupt()来恢复线程打断状态，二是直接抛出这个异常
+对于线程的取消执行，最好是用 Future.cancel()。定时获取任务结果最好用 Future.get(timeout) 而不是join(timeout)
+在对线程环境中，判断一个类的方法是不是线程安全的，就需要假设这个类的方法会被其他的多个不同线程调用，以此来判断竞争条件、死锁等问题
+在 ExecutorService 中 shutdown/shutdownNow之后，awaitTermination可以用来检测剩余的任务多长时间可以执行完，但是有缺陷。
+Daemon Thread在 jvm 退出时不会执行清理工作，它的 finally 也不会执行
+使用显示的 Lock 接口时一定要将其放入 try-finally 块中。
+条件队列的使用方法：
+每一个对象都可以作为条件队列：拥有这个对象的锁，调用 wait() 方法，即导致将本线程加入到这个对象的等待集合中，并且释放所持有的锁；另一个拥有这个对象的锁的线程调用notify()方法，然后再释放锁，导致在这个对象上的等待集合中的线程
+中的任意一个被唤醒，然后被唤醒的线程恢复保存的上下文，当然它还是持有这个对象的锁的，继续执行 wait 下面的代码。注意，被唤醒的线程 wait 方法在返回时会去重新获取锁
+这需要和其他的线程一样去竞争。注意，前置条件必须也是被这个锁所保护的，不然当你doSomethingActually()时，条件有可能已经被其他线程修改而不成立了。注意，被唤醒了之后并不一定表示需要的条件已经满足了，所以，通常使用 wait 方法的形式如下：
+void doSomething() throws InterruptedException {
+    synchronized(lock) {
+        while(!conditionPredicate()) {
+            wait();
+        }
+        doSomethingActually();
+    }
+}
+又因为 notify()方法会随机的在这个对象的条件队列中挑选一个线程来唤醒，但是那个随机的可能刚好不是在等待这个条件，而等待这个事件的线程有没有被随机到，所以就只能继续等下去了。所以，一般来说，notifyAll()更适用
+正常的公开一个类即是publishing a shared object hapen-before another thread access it.但是由于有编译器重排，所以不能仅仅依靠代码顺序来保证 hapen-before,一般都是需要使用library 中已有的 hapen-before 类来实现。
+静态变量和静态初始化块不需要加锁就能保证每个线程在其使用是可见，但是，仅仅限于第一次访问时，即，如果这个变量是可变的，后续的修改还是需要加锁的。
+Double-Check lock 来作为 lazyInitialization 时，对象的引用必须是 volatile 的，因为不加所的读取一个共享变量有可能读取到其过期的或者是不完整的信息。
+
+
